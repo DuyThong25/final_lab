@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lab10/app/data/api.dart';
 import 'package:lab10/app/model/register.dart';
 import 'package:lab10/app/page/auth/login.dart';
@@ -79,7 +80,15 @@ class _RegisterState extends State<Register> {
                                 MaterialPageRoute(
                                     builder: (context) => const LoginScreen()));
                           } else {
-                            print(respone);
+                            print("Đăng ký thất bại: $respone");
+                            // Toast Message
+                            Fluttertoast.showToast(
+                                msg: "Lỗi đăng ký",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
                           }
                         },
                         child: const Text('Register'),
@@ -107,6 +116,46 @@ class _RegisterState extends State<Register> {
     return "Other";
   }
 
+  String? checkMessageErrorTextField(
+      String label, TextEditingController controller) {
+    final text = controller.text;
+    if (text.trim().isEmpty) {
+      if (label.trim().contains("Account")) {
+        return "Vui lòng nhập tài khoản";
+      } else if (label.trim().contains("Password")) {
+        return "Vui lòng nhập mật khẩu";
+      } else if (label.trim().contains("Confirm password")) {
+        return "Vui lòng nhập xác nhận mật khẩu";
+      } else if (label.trim().contains("Full Name")) {
+        return "Vui lòng nhập họ tên";
+      } else if (label.trim().contains("NumberID")) {
+        return "Vui lòng nhập Number ID";
+      } else if (label.trim().contains("PhoneNumber")) {
+        return "Vui lòng nhập số điện thoại";
+      } else if (label.trim().contains("BirthDay")) {
+        return "Vui lòng nhập ngày sinh";
+      } else if (label.trim().contains("SchoolYear")) {
+        return "Vui lòng nhập năm học";
+      } else if (label.trim().contains("SchoolKey")) {
+        return "Vui lòng nhập School Key";
+      } else {
+        return null;
+      }
+    } else {
+      // Nếu không empty
+      if (_confirmPasswordController.text != _passwordController.text &&
+          label.trim().contains("Confirm password")) {
+        return "Mật khẩu không giống nhau";
+      }
+
+      if (_passwordController.text.length < 6 &&
+          label.trim().contains("Password")) {
+        return "Mật khẩu không phải từ 6 ký tự trở lên ";
+      }
+      return null;
+    }
+  }
+
   //có thể thêm các biến cho phù hợp với từng field
   Widget textField(
       TextEditingController controller, String label, IconData icon) {
@@ -124,7 +173,9 @@ class _RegisterState extends State<Register> {
             labelText: label,
             icon: Icon(icon),
             border: const OutlineInputBorder(),
-            errorText: controller.text.trim().isEmpty ? 'Please enter' : null,
+            errorText: checkMessageErrorTextField(label, controller),
+            // controller.text.trim().isEmpty ? 'Please enter' : null,
+
             focusedErrorBorder: controller.text.isEmpty
                 ? const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red))
@@ -209,6 +260,11 @@ class _RegisterState extends State<Register> {
             )),
           ],
         ),
+        // Error Text of Radio
+        _gender == 0
+            ? const Text("Không được để trống giới tính",
+                style: TextStyle(color: Colors.red))
+            : Container(),
         const SizedBox(height: 16),
         TextFormField(
           controller: _imageURL,

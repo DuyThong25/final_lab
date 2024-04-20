@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
 import 'package:lab10/app/model/register.dart';
 import 'package:lab10/app/model/user.dart';
@@ -50,8 +52,14 @@ class APIRepository {
         return "signup fail";
       }
     } catch (ex) {
-      print(ex);
-      rethrow;
+      if (ex is DioError && ex.response?.statusCode == 400) {
+        // Xử lý khi có lỗi máy chủ
+        print(ex);
+        return "400";
+      }else {
+        print(ex);
+        rethrow;
+      }
     }
   }
 
@@ -66,13 +74,19 @@ class APIRepository {
         print("ok login");
         print("token: $tokenData");
         return tokenData;
-      } 
-      else {
+      } else {
         return "login fail";
       }
     } catch (ex) {
-      print(ex);
-      rethrow;
+      if (ex is DioError && ex.response?.statusCode == 500) {
+        // Xử lý khi có lỗi máy chủ
+        print(ex);
+        return "500";
+      } else {
+        // Xử lý các ngoại lệ khác
+        print(ex);
+        rethrow;
+      }
     }
   }
 
