@@ -165,4 +165,32 @@ class APIRepository {
       return "update fail";
     }
   }
+
+   Future<String?> forgetPassword(String accountID, String numberID, String newPassword) async {
+    try {
+      final body = FormData.fromMap({
+        "accountID": accountID,
+        "numberID": numberID,
+        "newPass": newPassword,
+      });
+
+      Response res = await api.sendRequest.put('/Auth/forgetPass',
+          options: Options(headers: header('no token')), data: body);
+      if (res.statusCode == 200) {
+        print("ok forget password");
+        return "ok";
+      } else {
+        return "update fail";
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return "update fail";
+      }
+      print(ex);
+      return "update fail";
+    }
+  }
+  
 }

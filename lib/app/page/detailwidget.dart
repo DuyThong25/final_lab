@@ -30,9 +30,9 @@ class DetailMain extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            itemContainerFunction(
+            _itemContainerFunction(
                 "Xem thông tin cá nhân", context, onPressToInfor),
-            itemContainerFunction(
+            _itemContainerFunction(
                 "Đổi mật khẩu", context, onPressToChangePassword),
           ],
         ),
@@ -40,7 +40,7 @@ class DetailMain extends StatelessWidget {
     );
   }
 
-  Widget itemContainerFunction(String title, BuildContext context, Function(BuildContext) onPressed) {
+  Widget _itemContainerFunction(String title, BuildContext context, Function(BuildContext) onPressed) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
       width: double.infinity,

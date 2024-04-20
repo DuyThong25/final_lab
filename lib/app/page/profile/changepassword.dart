@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lab10/app/config/const.dart';
 import 'package:lab10/app/data/api.dart';
 import 'package:lab10/app/data/sharepre.dart';
 
@@ -110,25 +111,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                       var user = await APIRepository().current(responeToken!);
                       // save share
                       saveUser(user);
-                      Fluttertoast.showToast(
-                          msg: "Cập nhật thành công",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      showToastMessage("Cập nhật thành công");
+
                       Navigator.pop(context);
-                      
                     } else {
                       print("Cập nhật thất bại: $responeToken");
                       // Toast Message
-                      Fluttertoast.showToast(
-                          msg: "Lỗi cập nhật mật khẩu",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      showToastMessage("Cập nhật thất bại");
                     }
                   },
                   child: Text(

@@ -35,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
         saveUser(user);
         // save token;
         saveToken(token);
+        showToastMessage("Đăng nhập thành công");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Mainpage()));
         return token;
@@ -44,14 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
           errorMessagePassword = "Sai tài khoản hoặc mật khẩu";
           errorMessageAccount = "Sai tài khoản hoặc mật khẩu";
         });
-        Fluttertoast.showToast(
-            msg: "Lỗi đăng nhập",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            textColor: Colors.white,
-            fontSize: 10.0);
-
+        showToastMessage("Lỗi đăng nhập");
         return "";
       }
     } else {
@@ -68,13 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
           errorMessageAccount = null;
           errorMessagePassword = "Vui lòng không để trống mật khẫu";
         }
-        Fluttertoast.showToast(
-            msg: "Lỗi đăng nhập",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showToastMessage("Lỗi đăng nhập");
       });
     }
   }
