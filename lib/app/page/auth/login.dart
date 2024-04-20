@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lab10/app/config/const.dart';
 import 'package:lab10/app/data/api.dart';
+import 'package:lab10/app/page/profile/forgetpassword.dart';
 import 'package:lab10/mainpage.dart';
 
 import '../register.dart';
@@ -26,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //lấy token (lưu share_preference)
       String token = await APIRepository()
           .login(accountController.text, passwordController.text);
-      if (token != "500") {
+      if (token != "login fail") {
         var user = await APIRepository().current(token);
         // save share
         saveUser(user);
@@ -41,14 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
           errorMessagePassword = "Sai tài khoản hoặc mật khẩu";
           errorMessageAccount = "Sai tài khoản hoặc mật khẩu";
         });
-         Fluttertoast.showToast(
+        Fluttertoast.showToast(
             msg: "Lỗi đăng nhập",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
             textColor: Colors.white,
             fontSize: 10.0);
-        
+
         return "";
       }
     } else {
@@ -72,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
             timeInSecForIosWeb: 1,
             textColor: Colors.white,
             fontSize: 16.0);
-        
       });
     }
   }
@@ -144,8 +146,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                   builder: (context) => const Register()));
                         },
                         child: const Text("Register"),
-                      ))
+                      )),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        CupertinoPageRoute(builder: 
+                          (context) => const ForgetPassword(),
+                        )
+                      );
+                    },
+                    child: const Text(
+                      'Quên mật khẩu ?',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        decorationThickness: 1,
+                        // Tạo khoảng cách giữa chữ và đường gạch
+                        decorationStyle: TextDecorationStyle.solid,
+                      ),
+                    ),
                   )
                 ],
               ),

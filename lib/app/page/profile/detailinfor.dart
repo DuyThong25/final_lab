@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lab10/app/page/profile/updateprofile.dart';
-import '../model/user.dart';
+import '../../model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Detail extends StatefulWidget {
-  const Detail({super.key});
+class DetailInfor extends StatefulWidget {
+  const DetailInfor({super.key});
 
   @override
-  State<Detail> createState() => _DetailState();
+  State<DetailInfor> createState() => _DetailInforState();
 }
 
-class _DetailState extends State<Detail> {
+class _DetailInforState extends State<DetailInfor> {
   // khi dùng tham số truyền vào phải khai báo biến trùng tên require
   User user = User.userEmpty();
   // create style
@@ -45,6 +45,9 @@ class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Thông tin cá nhân"),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Center(

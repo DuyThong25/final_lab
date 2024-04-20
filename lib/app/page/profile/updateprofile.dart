@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lab10/app/data/api.dart';
 import 'package:lab10/app/data/sharepre.dart';
 import 'package:lab10/app/model/user.dart';
-import 'package:lab10/app/page/detail.dart';
+import 'package:lab10/app/page/profile/detailinfor.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key, required this.user});
@@ -25,28 +25,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
   String temp = '';
 
   Future<String?> updateProfile() async {
-    return await APIRepository().UpdateProfile(User.updateProfile(
-            idNumber: widget.user.idNumber,
-            fullName: _fullNameController.text,
-            phoneNumber: _phoneNumberController.text,
-            gender: getGender(),
-            birthDay: _birthDayController.text,
-            schoolYear: _schoolYearController.text,
-            schoolKey: _schoolKeyController.text,
-            imageURL: _imageURL.text)
-        // Signup(
-        //   accountID: _accountController.text,
-        //   birthDay: _birthDayController.text,
-        //   password: _passwordController.text,
-        //   confirmPassword: _confirmPasswordController.text,
-        //   fullName: _fullNameController.text,
-        //   phoneNumber: _phoneNumberController.text,
-        //   schoolKey: _schoolKeyController.text,
-        //   schoolYear: _schoolYearController.text,
-        //   gender: getGender(),
-        //   imageUrl: _imageURL.text,
-        //   numberID: _numberIDController.text));
-        );
+    return await APIRepository().updateProfile(User.updateProfile(
+        idNumber: widget.user.idNumber,
+        fullName: _fullNameController.text,
+        phoneNumber: _phoneNumberController.text,
+        gender: getGender(),
+        birthDay: _birthDayController.text,
+        schoolYear: _schoolYearController.text,
+        schoolKey: _schoolKeyController.text,
+        imageURL: _imageURL.text));
   }
 
   @override
@@ -111,10 +98,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           String? responeToken = await updateProfile();
 
                           if (responeToken != "update fail") {
-                            // Cập nhật lại SharedPreferences                   
-                            var user = await APIRepository().current(responeToken!);
+                            // Cập nhật lại SharedPreferences
+                            var user =
+                                await APIRepository().current(responeToken!);
                             // save share
                             saveUser(user);
+                            Fluttertoast.showToast(
+                                msg: "Cập nhật thành công",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
                             Navigator.pop(context);
                           } else {
                             print("Cập nhật thất bại: $responeToken");

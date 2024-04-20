@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lab10/app/model/user.dart';
-import 'package:lab10/app/page/detail.dart';
+import 'package:lab10/app/page/profile/detailinfor.dart';
+import 'package:lab10/app/page/detailwidget.dart';
 import 'package:lab10/app/route/page1.dart';
 import 'package:lab10/app/route/page2.dart';
 import 'package:lab10/app/route/page3.dart';
@@ -56,7 +57,7 @@ class _MainpageState extends State<Mainpage> {
         break;
       case 3:
         {
-          return const Detail();
+          return const DetailMain();
         }
       default:
         nameWidgets = "None";

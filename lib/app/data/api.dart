@@ -79,14 +79,14 @@ class APIRepository {
         return "login fail";
       }
     } catch (ex) {
-      if (ex is DioError && ex.response?.statusCode == 500) {
+      if (ex is DioError) {
         // Xử lý khi có lỗi máy chủ
         print(ex);
-        return "500";
+        return "login fail";
       } else {
         // Xử lý các ngoại lệ khác
         print(ex);
-        rethrow;
+        return "login fail";
       }
     }
   }
@@ -101,7 +101,7 @@ class APIRepository {
     }
   }
 
-  Future<String?> UpdateProfile(User user) async {
+  Future<String?> updateProfile(User user) async {
     try {
       final body = FormData.fromMap({
         "numberID": user.idNumber,
@@ -113,7 +113,7 @@ class APIRepository {
         "schoolKey": user.schoolKey,
         "imageURL": user.imageURL,
       });
-      
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
 
@@ -122,6 +122,35 @@ class APIRepository {
       if (res.statusCode == 200) {
         // final tokenData = res.data['data']['token'];
         print("ok update");
+        return token;
+      } else {
+        return "update fail";
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return "update fail";
+      }
+      print(ex);
+      return "update fail";
+    }
+  }
+
+    Future<String?> changePassword(String currentPassword, String newPassword) async {
+    try {
+      final body = FormData.fromMap({
+        "OldPassword": currentPassword,
+        "NewPassword": newPassword,
+      });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Response res = await api.sendRequest.put('/Auth/ChangePassword',
+          options: Options(headers: header('$token')), data: body);
+      if (res.statusCode == 200) {
+        print("ok update password");
         return token;
       } else {
         return "update fail";
