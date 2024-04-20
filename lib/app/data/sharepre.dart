@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -19,10 +19,17 @@ Future<bool> saveUser(User objUser) async {
   }
 }
 
+saveToken(String token) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('token', token);
+  print("Luu thanh cong token: $token");
+}
+
 Future<bool> logOut(BuildContext context) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user', '');
+    prefs.setString('token', '');
     print("Logout thành công");
     Navigator.pushAndRemoveUntil(
         context,

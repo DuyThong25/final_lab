@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lab10/app/page/profile/updateprofile.dart';
 import '../model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,12 +78,12 @@ class _DetailState extends State<Detail> {
               ),
             ),
             const SizedBox(
-              width: 320,
+                width: 320,
                 child: Divider(
-              color: Colors.grey,
-              thickness: 0.5,
-              height: 50,
-            )),
+                  color: Colors.grey,
+                  thickness: 0.5,
+                  height: 50,
+                )),
             textInformation("Mã sinh viên: ", user.idNumber ?? ""),
             textInformation("Tên: ", user.fullName ?? ""),
             textInformation("Số điện thoại: ", user.phoneNumber ?? ""),
@@ -90,6 +92,28 @@ class _DetailState extends State<Detail> {
             textInformation("Năm học: ", user.schoolYear ?? ""),
             textInformation("Mã năm học: ", user.schoolKey ?? ""),
             textInformation("Ngày tạo: ", user.dateCreated ?? ""),
+
+            // Button update profile
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => UpdateProfile(user: user))).then((value) {
+                      setState(() {
+                        getDataUser();
+                      });
+                    });
+              },
+              child: Text(
+                "Chỉnh sửa thông tin",
+                style: TextStyle(
+                    color: Colors.amber[800],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+            )
           ]),
         ),
       ),

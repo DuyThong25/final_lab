@@ -109,11 +109,11 @@ class _RegisterState extends State<Register> {
 
   getGender() {
     if (_gender == 1) {
-      return "Male";
+      return "Nam";
     } else if (_gender == 2) {
-      return "Female";
+      return "Nữ";
     }
-    return "Other";
+    return "Khác";
   }
 
   String? checkMessageErrorTextField(

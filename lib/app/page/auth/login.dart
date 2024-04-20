@@ -30,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
         var user = await APIRepository().current(token);
         // save share
         saveUser(user);
+        // save token;
+        saveToken(token);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Mainpage()));
         return token;

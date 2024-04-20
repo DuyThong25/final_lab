@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:lab10/app/model/register.dart';
 import 'package:lab10/app/model/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class API {
   final Dio _dio = Dio();
@@ -56,7 +57,7 @@ class APIRepository {
         // Xử lý khi có lỗi máy chủ
         print(ex);
         return "400";
-      }else {
+      } else {
         print(ex);
         rethrow;
       }
@@ -97,6 +98,42 @@ class APIRepository {
       return User.fromJson(res.data);
     } catch (ex) {
       rethrow;
+    }
+  }
+
+  Future<String?> UpdateProfile(User user) async {
+    try {
+      final body = FormData.fromMap({
+        "numberID": user.idNumber,
+        "fullName": user.fullName,
+        "phoneNumber": user.phoneNumber,
+        "gender": user.gender,
+        "birthDay": user.birthDay,
+        "schoolYear": user.schoolYear,
+        "schoolKey": user.schoolKey,
+        "imageURL": user.imageURL,
+      });
+      
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Response res = await api.sendRequest.put('/Auth/updateProfile',
+          options: Options(headers: header('$token')), data: body);
+      if (res.statusCode == 200) {
+        // final tokenData = res.data['data']['token'];
+        print("ok update");
+        return token;
+      } else {
+        return "update fail";
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return "update fail";
+      }
+      print(ex);
+      return "update fail";
     }
   }
 }

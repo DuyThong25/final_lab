@@ -24,6 +24,18 @@ class User {
     required this.dateCreated,
     required this.status,
   });
+
+   User.updateProfile({
+    required this.idNumber,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.gender,
+    required this.birthDay,
+    required this.schoolYear,
+    required this.schoolKey,
+    required this.imageURL,
+  });
+
   static User userEmpty() {
     return User(
         idNumber: '',
