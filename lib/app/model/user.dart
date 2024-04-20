@@ -67,6 +67,8 @@ class User {
     data['birthDay'] = birthDay;
     data['schoolYear'] = schoolYear;
     data['schoolKey'] = schoolKey;
+    data['dateCreated'] = dateCreated;
+
 
     return data;
   }

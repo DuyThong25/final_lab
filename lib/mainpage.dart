@@ -77,8 +77,8 @@ class _MainpageState extends State<Mainpage> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 243, 152, 33),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade800,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -86,14 +86,31 @@ class _MainpageState extends State<Mainpage> {
                   user.imageURL!.length < 5
                       ? const SizedBox()
                       : CircleAvatar(
-                          radius: 40,
-                          backgroundImage: NetworkImage(
-                            user.imageURL!,
-                          )),
+                          backgroundColor: Colors.blue.shade900,
+                          radius: 48,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blue.shade100,
+                            radius: 46,
+                            child: CircleAvatar(
+                              backgroundImage: user.imageURL != null
+                                  ? NetworkImage(user.imageURL!)
+                                  : const AssetImage(
+                                          "assets/images/hlphone_logo.png")
+                                      as ImageProvider,
+                              radius: 44,
+                            ),
+                          ),
+                        ),
                   const SizedBox(
-                    height: 8,
+                    height: 6,
                   ),
-                  Text(user.fullName!),
+                  Text(
+                    user.fullName!,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
