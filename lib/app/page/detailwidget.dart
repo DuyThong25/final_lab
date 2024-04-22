@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lab10/app/page/profile/changepassword.dart';
 import 'package:lab10/app/page/profile/detailinfor.dart';
+import 'package:lab10/app/route/categorywidget.dart';
+import 'package:lab10/app/route/productwidget.dart';
 
 class DetailMain extends StatelessWidget {
-  const DetailMain({super.key});
-
-  void onPressToInfor(BuildContext context) {
+  const DetailMain({super.key, this.nameWidget, this.user, this.isAdmin = true,});
+  final nameWidget;
+  final user;
+  final isAdmin;
+  onPressToInfo(BuildContext context) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -15,7 +19,7 @@ class DetailMain extends StatelessWidget {
     );
   }
 
-  void onPressToChangePassword(BuildContext context) {
+  onPressToChangePassword(BuildContext context) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -24,29 +28,88 @@ class DetailMain extends StatelessWidget {
     );
   }
 
+  onPressToListCategory(BuildContext context) {
+    if (isAdmin) {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => CategoryDefault(
+            user: user,
+            isAdmin: isAdmin,
+          ),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => CategoryDefault(
+            user: user,
+            
+          ),
+        ),
+      );
+    }
+  }
+
+    onPressToListProduct(BuildContext context) {
+    if (isAdmin) {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => ProductDefault(
+            user: user,
+            isAdmin: isAdmin,
+          ),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => ProductDefault(
+            user: user,
+            
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _itemContainerFunction(
-                "Xem thông tin cá nhân", context, onPressToInfor),
-            _itemContainerFunction(
-                "Đổi mật khẩu", context, onPressToChangePassword),
+            if (nameWidget == 'Detail') ...[
+              _itemContainerFunction(
+                  "Xem thông tin cá nhân", context, onPressToInfo),
+              _itemContainerFunction(
+                  "Đổi mật khẩu", context, onPressToChangePassword),
+            ],
+            if (nameWidget == 'Home') ...[
+              _itemContainerFunction(
+                  "Loại sản phẩm", context, onPressToListCategory),
+              _itemContainerFunction(
+                  "Danh sách sản phẩm", context, onPressToListProduct),
+            ]
           ],
         ),
       ),
     );
   }
 
-  Widget _itemContainerFunction(String title, BuildContext context, Function(BuildContext) onPressed) {
+  Widget _itemContainerFunction(
+      String title, BuildContext context, onPressed) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
       width: double.infinity,
       height: 60.0,
       child: ElevatedButton(
-        onPressed: () => onPressed(context), // Sử dụng hàm ẩn danh
+        onPressed: () {
+          onPressed(context);
+        }, // Sử dụng hàm ẩn danh
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(

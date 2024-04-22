@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lab10/app/model/user.dart';
-import 'package:lab10/app/page/profile/detailinfor.dart';
 import 'package:lab10/app/page/detailwidget.dart';
-import 'package:lab10/app/route/page1.dart';
+import 'package:lab10/app/route/categorywidget.dart';
 import 'package:lab10/app/route/page2.dart';
 import 'package:lab10/app/route/page3.dart';
+import 'package:lab10/app/route/productwidget.dart';
 import 'app/page/defaultwidget.dart';
 import 'app/data/sharepre.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +48,8 @@ class _MainpageState extends State<Mainpage> {
     switch (index) {
       case 0:
         nameWidgets = "Home";
-        break;
+        return DetailMain(nameWidget: nameWidgets, user: user, isAdmin: false,);
+
       case 1:
         nameWidgets = "Contact";
         break;
@@ -57,7 +58,8 @@ class _MainpageState extends State<Mainpage> {
         break;
       case 3:
         {
-          return const DetailMain();
+        nameWidgets = "Detail";
+          return DetailMain(nameWidget: nameWidgets,);
         }
       default:
         nameWidgets = "None";
@@ -144,22 +146,22 @@ class _MainpageState extends State<Mainpage> {
             ),
             ListTile(
               leading: const Icon(Icons.pages),
-              title: const Text('Page1'),
+              title: const Text('Loại sản phẩm (admin)'),
               onTap: () {
                 Navigator.pop(context);
                 _selectedIndex = 0;
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Page1()));
+                    MaterialPageRoute(builder: (context) => CategoryDefault(user: user, isAdmin: true, )));
               },
             ),
             ListTile(
               leading: const Icon(Icons.pages),
-              title: const Text('Page2'),
+              title: const Text('Danh sách sản phẩm (admin)'),
               onTap: () {
                 Navigator.pop(context);
                 _selectedIndex = 0;
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Page2()));
+                    MaterialPageRoute(builder: (context) => ProductDefault(user: user, isAdmin: true,)));
               },
             ),
             ListTile(

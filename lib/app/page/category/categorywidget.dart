@@ -4,11 +4,13 @@ class CategoryModel {
   final int? id;
   final String name;
   final String desc;
+  final String imageURL;
 
   CategoryModel({
     this.id,
     required this.name,
     required this.desc,
+    required this.imageURL,
   });
 
   // Convert a Breed into a Map. The keys must correspond to the names of the
@@ -16,8 +18,9 @@ class CategoryModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'desc': desc,
+      'Name': name,
+      'ImageURL': imageURL,
+      'Description': desc,
     };
   }
 
@@ -25,7 +28,8 @@ class CategoryModel {
     return CategoryModel(
       id: map['id']?.toInt() ?? 0,
       name: map['name'] ?? '',
-      desc: map['desc'] ?? '',
+      imageURL: map['imageURL'] ?? '',
+      desc: map['description'] ?? '',
     );
   }
 
