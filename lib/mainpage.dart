@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_cart/flutter_cart.dart';
 import 'package:lab10/app/model/user.dart';
 import 'package:lab10/app/page/detailwidget.dart';
+import 'package:lab10/app/route/billwidget.dart';
+import 'package:lab10/app/route/cartwidget.dart';
 import 'package:lab10/app/route/categorywidget.dart';
-import 'package:lab10/app/route/page2.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:lab10/app/route/page3.dart';
 import 'package:lab10/app/route/productwidget.dart';
 import 'app/page/defaultwidget.dart';
@@ -11,8 +14,8 @@ import 'app/data/sharepre.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Mainpage extends StatefulWidget {
-  const Mainpage({super.key});
-
+  const Mainpage({super.key, this.selectedIndex = 0});
+  final int? selectedIndex;
   @override
   State<Mainpage> createState() => _MainpageState();
 }
@@ -33,6 +36,7 @@ class _MainpageState extends State<Mainpage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _selectedIndex = widget.selectedIndex!;
     getDataUser();
     print(user.imageURL);
   }
@@ -48,18 +52,28 @@ class _MainpageState extends State<Mainpage> {
     switch (index) {
       case 0:
         nameWidgets = "Home";
-        return DetailMain(nameWidget: nameWidgets, user: user, isAdmin: false,);
+        return DetailMain(
+          nameWidget: nameWidgets,
+          user: user,
+          isAdmin: false,
+        );
 
       case 1:
-        nameWidgets = "Contact";
-        break;
+        nameWidgets = "Bill";
+        return const BillDefault();
       case 2:
-        nameWidgets = "Info";
-        break;
+        nameWidgets = "Cart";
+        List<CartModel> getCartItems = FlutterCart().cartItemsList;
+        return CartDefault(
+          listCartItems: getCartItems,
+          user: user,
+        );
       case 3:
         {
-        nameWidgets = "Detail";
-          return DetailMain(nameWidget: nameWidgets,);
+          nameWidgets = "Detail";
+          return DetailMain(
+            nameWidget: nameWidgets,
+          );
         }
       default:
         nameWidgets = "None";
@@ -73,10 +87,20 @@ class _MainpageState extends State<Mainpage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("HL Mobile"),
+        actions: [
+          // _selectedIndex == 2
+          //     ? Padding(
+          //         padding: const EdgeInsets.only(right: 16),
+          //         child: badges.Badge(
+          //           badgeContent: Text(FlutterCart().cartLength.toString()),
+          //           child: const Icon(Icons.shopping_cart),
+          //         ),
+          //       )
+          //     : Container()
+        ],
       ),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
@@ -150,8 +174,13 @@ class _MainpageState extends State<Mainpage> {
               onTap: () {
                 Navigator.pop(context);
                 _selectedIndex = 0;
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CategoryDefault(user: user, isAdmin: true, )));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CategoryDefault(
+                              user: user,
+                              isAdmin: true,
+                            )));
               },
             ),
             ListTile(
@@ -160,8 +189,13 @@ class _MainpageState extends State<Mainpage> {
               onTap: () {
                 Navigator.pop(context);
                 _selectedIndex = 0;
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProductDefault(user: user, isAdmin: true,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProductDefault(
+                              user: user,
+                              isAdmin: true,
+                            )));
               },
             ),
             ListTile(
@@ -209,7 +243,7 @@ class _MainpageState extends State<Mainpage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.blue.shade900,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),

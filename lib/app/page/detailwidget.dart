@@ -90,9 +90,9 @@ class DetailMain extends StatelessWidget {
             ],
             if (nameWidget == 'Home') ...[
               _itemContainerFunction(
-                  "Loại sản phẩm", context, onPressToListCategory),
+                  "Loại sản phẩm (User)", context, onPressToListCategory),
               _itemContainerFunction(
-                  "Danh sách sản phẩm", context, onPressToListProduct),
+                  "Danh sách sản phẩm (User)", context, onPressToListProduct),
             ]
           ],
         ),

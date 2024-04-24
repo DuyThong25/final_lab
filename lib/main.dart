@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cart/cart.dart';
 import 'package:lab10/app/page/auth/login.dart';
 
-void main() {
+Future<void> main() async {
+  // Khởi tạo cart
+  WidgetsFlutterBinding.ensureInitialized();
+  var cart = FlutterCart();
+  await cart.initializeCart(isPersistenceSupportEnabled: true);
+  
   runApp(const MainApp());
 }
 

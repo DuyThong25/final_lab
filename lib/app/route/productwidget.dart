@@ -1,26 +1,60 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cart/flutter_cart.dart';
 import 'package:intl/intl.dart';
 import 'package:lab10/app/config/const.dart';
 import 'package:lab10/app/data/api.dart';
+import 'package:lab10/app/model/cart.dart';
 import 'package:lab10/app/model/user.dart';
 import 'package:lab10/app/page/product/productwidget.dart';
+import 'package:lab10/app/route/cartwidget.dart';
 import 'package:lab10/app/route/product/pruductadd.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:lab10/mainpage.dart';
 
 class ProductDefault extends StatefulWidget {
   const ProductDefault({super.key, required this.user, this.isAdmin = false});
   final User user;
   final isAdmin;
-
   @override
   State<ProductDefault> createState() => _ProductDefaultState();
 }
 
 class _ProductDefaultState extends State<ProductDefault> {
+  int quantityCarrt = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    quantityCarrt = FlutterCart().cartLength;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Danh sách sản phẩm"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: badges.Badge(
+              badgeContent: Text(quantityCarrt.toString()),
+              child: const Icon(Icons.shopping_cart),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const Mainpage(selectedIndex: 2,)
+                  ),
+                ).then((value) => {setState(() {})});
+              
+              },
+              // Navigator.popUntil(context);
+              
+            ),
+          )
+        ],
       ),
       floatingActionButton: widget.isAdmin
           ? FloatingActionButton(
@@ -253,21 +287,29 @@ class _ProductDefaultState extends State<ProductDefault> {
                         color: Colors.yellow.shade800,
                       ))
                 ] else ...[
-                  SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Expanded(
                       child: ElevatedButton.icon(
                     style: ButtonStyle(
-                      iconColor:  MaterialStatePropertyAll(Colors.yellow.shade800),
+                      iconColor:
+                          MaterialStatePropertyAll(Colors.yellow.shade800),
                       fixedSize: const MaterialStatePropertyAll(Size(20, 20)),
                     ),
                     icon: const Icon(Icons.add_shopping_cart_outlined),
-                    label:  Text("Thêm vào giỏ hàng",
+                    label: Text("Thêm vào giỏ hàng",
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.yellow.shade800,
-                          fontWeight: FontWeight.bold
-                        )),
-                    onPressed: () {},
+                            fontSize: 16,
+                            color: Colors.yellow.shade800,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      addToCart(product);
+                      setState(() {
+                        quantityCarrt = FlutterCart().cartLength;
+                      });
+                      showToastMessage("Thêm thành công");
+                    },
                   ))
                 ]
               ],

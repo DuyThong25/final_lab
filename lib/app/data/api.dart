@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:dio/dio.dart';
+import 'package:flutter_cart/flutter_cart.dart';
+import 'package:lab10/app/model/bill.dart';
 import 'package:lab10/app/model/register.dart';
 import 'package:lab10/app/model/user.dart';
 import 'package:lab10/app/page/category/categorywidget.dart';
@@ -355,7 +357,7 @@ class APIRepository {
     }
   }
 
-  Future<String?> removeProduct(int idProduct,String accountId) async {
+  Future<String?> removeProduct(int idProduct, String accountId) async {
     try {
       final body =
           FormData.fromMap({'productID': idProduct, 'accountID': accountId});
@@ -413,7 +415,7 @@ class APIRepository {
           'ImageURL': imageUrl,
           'Price': price,
           'CategoryID': categoryId,
-          'accountID' : accountId
+          'accountID': accountId
         });
       }
 
@@ -453,4 +455,120 @@ class APIRepository {
     }
   }
 
+  Future<String?> sendBill(List<CartModel> listCartModel) async {
+    try {
+      final body = listCartModel.map((cartModel) {
+        return {"productID": cartModel.productId, "count": cartModel.quantity};
+      }).toList();
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Response res = await api.sendRequest.post('/Order/addBill',
+          options: Options(headers: header('$token')), data: body);
+
+      if (res.statusCode == 200) {
+        print("ok add bill");
+        return "ok";
+      } else {
+        return "add bill fail";
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return "add bill fail";
+      }
+      print(ex);
+      return "add bill fail";
+    }
+  }
+
+  Future<List<BillModel>>? getHistoryBill() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Response res = await api.sendRequest
+          .get('/Bill/getHistory', options: Options(headers: header('$token')));
+
+      if (res.statusCode == 200) {
+        final data = res.data as List;
+        List<BillModel> results =
+            data.map((item) => BillModel.fromMap(item)).toList();
+        print("ok get history bill");
+        return results;
+      } else {
+        return Future.value([]);
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return Future.error(ex);
+      }
+      print(ex);
+      return Future.error(ex);
+    }
+  }
+
+  Future<String?> removeBill(String idBill) async {
+    try {
+      final body = {'billID': idBill};
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Response res = await api.sendRequest.delete('/Bill/remove',
+          options: Options(headers: header("$token")), queryParameters: body);
+
+      if (res.statusCode == 200) {
+        print("ok remove bill");
+        return "ok";
+      } else {
+        return "remove fail";
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        // Xử lý khi có lỗi máy chủ
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return "remove fail";
+      } else {
+        // Xử lý các ngoại lệ khác
+        print(ex);
+        return "remove fail";
+      }
+    }
+  }
+
+  Future<List<BillDetailModel>>? getBillByID(int idBill) async {
+    try {
+      final body = {'billID': idBill};
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+
+      Response res = await api.sendRequest.delete('/Bill/remove',
+          options: Options(headers: header("$token")), queryParameters: body);
+
+      if (res.statusCode == 200) {
+        final data = res.data as List;
+        List<BillDetailModel> results =
+            data.map((item) => BillDetailModel.fromMap(item)).toList();
+        print("ok get history bill");
+        return results;
+      } else {
+        return Future.value([]);
+      }
+    } catch (ex) {
+      if (ex is DioError) {
+        print(ex);
+        print("status code: ${ex.response?.statusCode.toString()}");
+        return Future.error(ex);
+      }
+      print(ex);
+      return Future.error(ex);
+    }
+  }
 }
