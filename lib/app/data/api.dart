@@ -542,21 +542,21 @@ class APIRepository {
     }
   }
 
-  Future<List<BillDetailModel>>? getBillByID(int idBill) async {
+  Future<List<BillDetailModel>>? getBillByID(String idBill) async {
     try {
       final body = {'billID': idBill};
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
 
-      Response res = await api.sendRequest.delete('/Bill/remove',
+      Response res = await api.sendRequest.post('/Bill/getByID',
           options: Options(headers: header("$token")), queryParameters: body);
 
       if (res.statusCode == 200) {
         final data = res.data as List;
         List<BillDetailModel> results =
             data.map((item) => BillDetailModel.fromMap(item)).toList();
-        print("ok get history bill");
+        print("ok get bill detail");
         return results;
       } else {
         return Future.value([]);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lab10/app/config/const.dart';
 import 'package:lab10/app/data/api.dart';
 import 'package:lab10/app/model/bill.dart';
+import 'package:lab10/app/route/bill/billDetailWidget.dart';
 import 'package:lab10/mainpage.dart';
 
 class BillDefault extends StatefulWidget {
@@ -20,14 +21,10 @@ class _BillDefaultState extends State<BillDefault> {
     if (respone != "remove fail") {
       showToastMessage("Xóa thành công");
       Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
-          builder: (context) => Mainpage(selectedIndex: 1)
-        ),
+        CupertinoPageRoute(builder: (context) => Mainpage(selectedIndex: 1)),
         (route) => true,
       );
-      setState(() {
-        
-      });
+      setState(() {});
     } else {
       showToastMessage("Lỗi xóa bill");
     }
@@ -164,7 +161,13 @@ class _BillDefaultState extends State<BillDefault> {
                 showAlertDialog(deleteBillItem, false, bill);
               },
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BillDetailWidget(idBill: bill.id),
+                  ));
+            },
           ),
         ));
   }
